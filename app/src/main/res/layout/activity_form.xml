@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".FormColorActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Color List"
+        android:textAlignment="center"
+        android:textColor="@color/pink"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="30dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <EditText
+            android:id="@+id/etColor"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginHorizontal="40dp"
+            android:hint="Nome da cor"
+            tools:ignore="MissingConstraints"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="40dp"
+        >
+
+        <TextView
+            android:id="@+id/tvRed"
+            android:text="0"
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <SeekBar
+            android:id="@+id/sbRed"
+            android:progressTint="@color/red"
+            android:thumbTint="@color/red"
+            android:backgroundTint="@color/red"
+            android:min="0"
+            android:max="255"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="40dp"
+        >
+
+        <TextView
+            android:id="@+id/tvBlue"
+            android:text="0"
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <SeekBar
+            android:id="@+id/sbBlue"
+            android:progressTint="@color/blue"
+            android:thumbTint="@color/blue"
+            android:backgroundTint="@color/blue"
+            android:min="0"
+            android:max="255"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="40dp"
+        >
+
+        <TextView
+            android:id="@+id/tvGreen"
+            android:text="0"
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <SeekBar
+            android:id="@+id/sbGreen"
+            android:progressTint="@color/green"
+            android:thumbTint="@color/green"
+            android:backgroundTint="@color/green"
+            android:min="0"
+            android:max="255"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/grey"
+            android:text="Cancelar"
+            android:layout_marginRight="20dp"/>
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/pink"
+            android:text="Salvar"
+            android:layout_marginLeft="20dp"/>
+    </LinearLayout>
+</LinearLayout>
