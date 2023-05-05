@@ -21,7 +21,7 @@ class MyAdapter(private val onItemClick: (MyColor) -> Unit) : ListAdapter<MyColo
     }
 
     override fun onBindViewHolder(holder: MyHolder, position: Int) {
-        holder.bind(getItem(position), onItemClick)
+        holder.bind(getItem(position), position, onItemClick)
     }
 
 
@@ -36,17 +36,17 @@ class MyAdapter(private val onItemClick: (MyColor) -> Unit) : ListAdapter<MyColo
 //        this.notifyDataSetChanged()
 //    }
 //
-//    fun del(position: Int){
-//        this.colorList.removeAt(position)
-//        notifyItemRemoved(position)
-//        notifyItemRangeChanged(position, this.colorList.size)
-//        this.notifyDataSetChanged()
-//    }
-//
-//    fun mov(from: Int, to: Int){
-//        Collections.swap(this.colorList, from, to)
-//        notifyItemMoved(from, to)
-//    }
+    fun del(position: Int){
+        currentList.removeAt(position)
+        notifyItemRemoved(position)
+        notifyItemRangeChanged(position, currentList.size)
+        this.notifyDataSetChanged()
+    }
+
+    fun mov(from: Int, to: Int){
+        Collections.swap(currentList, from, to)
+        notifyItemMoved(from, to)
+    }
 
 
 
@@ -55,10 +55,10 @@ class MyAdapter(private val onItemClick: (MyColor) -> Unit) : ListAdapter<MyColo
 
 class MyHolder(val binding: ColorItemBinding): ViewHolder(binding.root){
 
-    fun bind(myColor : MyColor, onItemClick: (MyColor) -> Unit){
+    fun bind(myColor : MyColor, position : Int, onItemClick: (MyColor) -> Unit){
         binding.tvColorName.text = myColor.colorName
         binding.root.setOnClickListener {
-            onItemClick(myColor)
+            onItemClick(myColor.copy(position = position))
         }
     }
 }

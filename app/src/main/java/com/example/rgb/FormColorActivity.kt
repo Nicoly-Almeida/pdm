@@ -36,7 +36,7 @@ class FormColorActivity: AppCompatActivity() {
         binding.sbGreen.setOnSeekBarChangeListener(OnChangeColor())
         binding.sbBlue.setOnSeekBarChangeListener(OnChangeColor())
 
-        binding.btnSave.setOnClickListener({save()})
+        binding.btnSave.setOnClickListener({save(color)})
         binding.btnCancel.setOnClickListener({ cancel() })
     }
         fun createColor(): Int{
@@ -53,16 +53,13 @@ class FormColorActivity: AppCompatActivity() {
             return Color.rgb(255 - red, 255 - green, 255 - blue)
         }
 
-        fun hexColor(color: Int): String {
-            return Integer.toHexString(color)
-        }
-
-        fun save(){
+        fun save(myColor: MyColor?){
             val red = binding.sbRed.progress
             val green = binding.sbGreen.progress
             val blue = binding.sbBlue.progress
             val name = binding.etColor.text.toString()
-            val cor = MyColor(red, green, blue, name)
+            val cor = myColor?.copy(red = red, green = green, blue = blue, colorName = name) ?: MyColor(red, green, blue, name)
+
             val intent = Intent().apply {
                 putExtra("COLOR", cor)
             }

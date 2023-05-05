@@ -1,11 +1,15 @@
 package com.example.rgb
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.rgb.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -22,8 +26,15 @@ class MainActivity : AppCompatActivity() {
             } else {
                 it.data?.getParcelableExtra<MyColor>("COLOR")
             }
-            color?.let {
-                this@MainActivity.colors.add(it)
+            color?.let {myColor ->
+                binding.rvColorNames.adapter = adapter
+                binding.rvColorNames.layoutManager = LinearLayoutManager(this)
+                if (myColor.position == null){
+                    this@MainActivity.colors.add(myColor)
+                } else {
+                    colors.removeAt(myColor.position)
+                    colors.add(myColor.position, myColor)
+                }
                 adapter.submitList(this@MainActivity.colors)
             }
         }
@@ -34,11 +45,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         this.binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(this.binding.root)
-        binding.rvColorNames.adapter = adapter
-        binding.rvColorNames.layoutManager = LinearLayoutManager(this)
+
         binding.fbAdd.setOnClickListener {
             openFormColorActivity()
         }
+        ItemTouchHelper(OnSwipe()).attachToRecyclerView(binding.rvColorNames)
     }
 
     private fun openFormColorActivity(myColor: MyColor? = null) {
@@ -114,44 +125,54 @@ class MainActivity : AppCompatActivity() {
 //            sbBlue.setOnSeekBarChangeListener(colorSeekBarChangeListener)
 //        }
 //
-//        inner class OnSwipe : ItemTouchHelper.SimpleCallback(
-//            ItemTouchHelper.DOWN or ItemTouchHelper.UP,
-//            ItemTouchHelper.START or ItemTouchHelper.END
-//        ) {
-//            override fun onMove(
-//                recyclerView: RecyclerView,
-//                viewHolder: RecyclerView.ViewHolder,
-//                target: RecyclerView.ViewHolder
-//            ): Boolean {
-//                (this@MainActivity.rvColorNames.adapter as MyAdapter).mov(
-//                    viewHolder.adapterPosition,
-//                    target.adapterPosition
-//                )
-//                return true
-//            }
-//
-//            @SuppressLint("SuspiciousIndentation")
-//            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-//                val position = viewHolder.adapterPosition
-//
-//                if (direction == ItemTouchHelper.END) {
-//                    run {
-//                        AlertDialog.Builder(this@MainActivity)
-//                            .setTitle("Excluir item")
-//                            .setMessage("Tem certeza que deseja excluir esta cor?")
-//                            .setPositiveButton("Sim") { dialog, _ ->
-//                                (this@MainActivity.rvColorNames.adapter as MyAdapter).del(position)
-//                                dialog.dismiss()
-//                            }
-//                            .setNegativeButton("Não") { dialog, _ ->
-//                                (this@MainActivity.rvColorNames.adapter as MyAdapter)
-//                                dialog.dismiss()
-//                            }
-//                            .create()
-//                            .show()
-//                    }
-//                }
-//            }
-//        }
+        inner class OnSwipe : ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.DOWN or ItemTouchHelper.UP,
+            ItemTouchHelper.START or ItemTouchHelper.END
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                (binding.rvColorNames.adapter as MyAdapter).mov(
+                    viewHolder.adapterPosition,
+                    target.adapterPosition
+                )
+                return true
+            }
+
+            @SuppressLint("SuspiciousIndentation")
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+
+                if (direction == ItemTouchHelper.END) {
+                    run {
+                        AlertDialog.Builder(this@MainActivity)
+                            .setTitle("Excluir item")
+                            .setMessage("Tem certeza que deseja excluir esta cor?")
+                            .setPositiveButton("Sim") { dialog, _ ->
+                                colors.removeAt(position)
+                                adapter.submitList(colors)
+                                dialog.dismiss()
+                            }
+                            .setNegativeButton("Não") { dialog, _ ->
+                                (binding.rvColorNames.adapter as MyAdapter)
+                                dialog.dismiss()
+                            }
+                            .create()
+                            .show()
+                    }
+                } else{
+                    val intent = Intent(Intent.ACTION_SEND).apply {
+                        val color = colors[position]
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_SUBJECT, "Estou enviando uma cor em RGB!")
+                        putExtra(Intent.EXTRA_TEXT, "Nome hexadecimal: ${color.hexColor()} red: ${color.red} green: ${color.green} blue: ${color.blue}")
+                    }
+                    val shareIntent = Intent.createChooser(intent, null)
+                    startActivity(shareIntent)
+                }
+            }
+        }
 
 }
